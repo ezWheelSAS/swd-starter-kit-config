@@ -41,6 +41,8 @@ security function.
 | SLS parameters                  | `velocity_limit_u32 : 680`                    |
 |                                 | `time_to_velocity_monitoring : 1000`          |
 
+See the commissioning script [`commissioning/swd_right_5_commissioning.py`](https://github.com/ezWheelSAS/swd_starter_kit_scripts/blob/main/commissioning/swd_right_5_commissioning.py).
+
 ## Left motor
 
 On this motor, we connected:
@@ -75,6 +77,7 @@ stop (`STO`).
 | SLS parameters                  | `velocity_limit_u32 : 680`                    |
 |                                 | `time_to_velocity_monitoring : 1000`          |
 
+See the commissioning script [`commissioning/swd_left_4_commissioning.py`](https://github.com/ezWheelSAS/swd_starter_kit_scripts/blob/main/commissioning/swd_left_4_commissioning.py).
 
 ## The SE2L LiDAR
 The LiDAR can be commissioned using the constructor's software [SLS Project Designer](https://us.idec.com/idec-us/en/USD/Software-SLS-Project-Designer).

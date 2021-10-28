@@ -1,4 +1,12 @@
 # Commissioning
+## Safety connections
+In the SWD Starter Kit, the Left SWD Core motor is connected to the SE2L safety LiDAR, and both the left and right motors are connected to two emergency stop buttons.
+The motors then communicates the safety information with each other via the CANOpen Safety protocol.
+
+The overall connections are as follow:
+
+![System connections](figs/safety-connections.png)
+
 ## Right motor
 
 On this motor, we connected:
@@ -66,3 +74,28 @@ stop (`STO`).
 | STO parameters                  | `restart_acknowledge_behavior : false`        |
 | SLS parameters                  | `velocity_limit_u32 : 680`                    |
 |                                 | `time_to_velocity_monitoring : 1000`          |
+
+
+## The SE2L LiDAR
+The LiDAR can be commissioned using the constructor's software [SLS Project Designer](https://us.idec.com/idec-us/en/USD/Software-SLS-Project-Designer).
+
+The LiDAR delivered with the SWD Starter Kit comes preconfigured, the project file is available on [`commissioning/StarterKit_IDEC.hucx`](https://github.com/ezWheelSAS/swd_starter_kit_scripts/blob/main/commissioning/StarterKit_IDEC.hucx).
+
+
+If you need to modify or change the LiDAR zones, make sure the configuration is set correctly.
+
+### Network configuration
+![Network settings](figs/idec-1.png)
+
+### Operation mode
+![Operation mode](figs/idec-2.png)
+
+### Sensing settings
+![Sensing settings](figs/idec-3.png)
+
+### Protection zones (1 & 2)
+![Protection zone 1 (SDI)](figs/idec-4.png)
+
+![Protection zone 2 (SLS)](figs/idec-5.png)
+
+![Protection zones](figs/idec-6.png)

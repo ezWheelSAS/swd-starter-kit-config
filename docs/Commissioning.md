@@ -97,8 +97,14 @@ If you need to modify or change the LiDAR zones, make sure the configuration is 
 ![Sensing settings](figs/idec-3.png)
 
 ### Protection zones (1 & 2)
+Activation signal **"Protection 1"** on **OSSD 1 & 2** used for indicating the forward Safe Direction Indication (SDI+) if an obstacle is detected at less than **0.5m** (connected to **SafeIn 1 & 2** on the left SWD motor).
+
 ![Protection zone 1 (SDI)](figs/idec-4.png)
 
+Activation signal **"Protection 2"** on **OSSD 3 & 4** used for indicating the Safety Limited Speed (SLS) if an obstacle is detected at less than **2m** (connected to **SafeOut 1 & 2** on the left SWD motor).
+
 ![Protection zone 2 (SLS)](figs/idec-5.png)
+
+The configured SLS and SDI zones corresponds to the following geometry:
 
 ![Protection zones](figs/idec-6.png)

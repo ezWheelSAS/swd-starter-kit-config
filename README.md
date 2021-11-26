@@ -1,4 +1,4 @@
-# SWD® Starter Kit config files
+# SWD® Starter Kit configuration files
 
 This repo contains a set of sample configuration files for the SWD Starter Kit.
 

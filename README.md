@@ -1,6 +1,6 @@
-# SWD® Starter Kit Scripts
+# SWD® Starter Kit config files
 
-This repo contains a set of sample configuration scripts for the SWD Starter Kit.
+This repo contains a set of sample configuration files for the SWD Starter Kit.
 
 ## Commissioning
 The [`commissioning`](./commissioning) directory contains scripts for commissioning the left and right motors, alongside with a configuration file for the used LiDAR.

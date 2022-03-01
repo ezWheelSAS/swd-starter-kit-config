@@ -77,8 +77,8 @@ def update_SRDO_parameters():
     commissioning.check("setSafetyControlWordMapping()", error)
 
     # Update configuration validity
-    error = commissioning.srdo_client.setSRDOConfigurationValid()
-    commissioning.check("setSRDOConfigurationValid()", error)
+    error = commissioning.srdo_client.setSRDOConfigurationValidity()
+    commissioning.check("setSRDOConfigurationValidity()", error)
 
 
 # =======================

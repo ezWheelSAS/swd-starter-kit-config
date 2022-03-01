@@ -140,15 +140,15 @@ def disable_SRDO_parameters():
         error = srdo_client.setSRDOParameters(srdo, params)
         check(f"setSRDOParameters({srdo.name})", error)
 
-    error = srdo_client.setSRDOConfigurationValid()
-    check("setSRDOConfigurationValid()", error)
+    error = srdo_client.setSRDOConfigurationValidity()
+    check("setSRDOConfigurationValidity()", error)
 
 
-def update_ramps(vl_dec_delta_spped):
+def update_ramps(vl_dec_delta_speed):
     params, error = velocity_mode_client.getVelocityModeParameters()
     check("getVelocityModeParameters()", error)
 
-    params.vl_velocity_deceleration_delta_speed = vl_dec_delta_spped
+    params.vl_velocity_deceleration_delta_speed = vl_dec_delta_speed
 
     error = velocity_mode_client.setVelocityModeParameters(params)
     check("setVelocityParameters()", error)
@@ -186,9 +186,9 @@ def create_dbus_clients(instance_id: str):
     global communication_client
 
     # Load specific dbus user session if exists
-    if os.path.isfile("/opt/ezw/data/tmp/SYSTEMCTL_dbus.id"):
+    if os.path.isfile("/tmp/SYSTEMCTL_dbus.id"):
         print("SYSTEMCTL_dbus.id detected")
-        with open("/opt/ezw/data/tmp/SYSTEMCTL_dbus.id") as f:
+        with open("/tmp/SYSTEMCTL_dbus.id") as f:
             lines = f.readlines()
         env = dict(line.strip().split("=", 1) for line in lines)
         os.environ.update(env)

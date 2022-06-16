@@ -9,7 +9,7 @@ sys.path.append("/opt/ezw/usr/lib")
 
 from colorama import Fore, Style
 
-from smcdbusclient.communication import NetworkParameters, BitTiming, PDOCommunicationParameters, PDOTransmissionType, PDOId, CommunicationDBusClient
+from smcdbusclient.communication import NetworkParameters, BitTiming, PDOCommunicationParameters, PDOTransmissionType, PDOId, CommunicationDBusClient, PDOMappingParameters
 from smcdbusclient.pds import PolarityParameters, PDSDBusClient
 from smcdbusclient.safe_motion import STOId, SLSId, SafetyFunctionId, SafetyWordMapping, SafeMotionDBusClient
 
@@ -18,6 +18,8 @@ from smcdbusclient.nmt import NMTDBusClient
 from smcdbusclient.velocity_mode import VelocityModeDBusClient
 
 from smcdbusclient.srdo import SRDODBusClient, SRDOId
+
+from smcdbusclient.can_open import CANOpenDBusClient
 
 # global
 nmt_client = None
@@ -68,7 +70,7 @@ def update_communication_parameters(node_id: int):
     params = PDOCommunicationParameters()
 
     params.cob_id.can_id = 0x180 + node_id  # 0x180 + $NODE_ID
-    params.cob_id.valid = True
+    params.cob_id.valid = False
     params.cob_id.flag = True
     params.transmission_type = PDOTransmissionType.PDO_SYNC_1
 
@@ -82,20 +84,28 @@ def update_communication_parameters(node_id: int):
     error = communication_client.setTPDOCommunicationParameters(PDOId.PDO_2, params)
     check("setTPDOCommunicationParameters(PDOId.PDO_2)", error)
 
+    params.cob_id.valid = True
+
     # Set the COB ID of the TPDO_3
     params.cob_id.can_id = 0x380 + node_id  # 0x380 + $NODE_ID
     error = communication_client.setTPDOCommunicationParameters(PDOId.PDO_3, params)
     check("setTPDOCommunicationParameters(PDOId.PDO_3)", error)
+
+    params.cob_id.valid = False
 
     # Set the COB ID of the TPDO_4
     params.cob_id.can_id = 0x480 + node_id  # 0x480 + $NODE_ID
     error = communication_client.setTPDOCommunicationParameters(PDOId.PDO_4, params)
     check("setTPDOCommunicationParameters(PDOId.PDO_4)", error)
 
+    params.cob_id.valid = True
+
     # Set the COB ID of the RPDO_1
     params.cob_id.can_id = 0x200 + node_id  # 0x200 + $NODE_ID
     error = communication_client.setRPDOCommunicationParameters(PDOId.PDO_1, params)
     check("setRPDOCommunicationParameters(PDOId.PDO_1)", error)
+
+    params.cob_id.valid = False
 
     # Set the COB ID of the RPDO_2
     params.cob_id.can_id = 0x300 + node_id  # 0x300 + $NODE_ID
@@ -107,10 +117,26 @@ def update_communication_parameters(node_id: int):
     error = communication_client.setRPDOCommunicationParameters(PDOId.PDO_3, params)
     check("setRPDOCommunicationParameters(PDOId.PDO_3)", error)
 
+    params.cob_id.valid = True
+
     # Set the COB ID of the RPDO_4
     params.cob_id.can_id = 0x500 + node_id  # 0x500 + $NODE_ID
     error = communication_client.setRPDOCommunicationParameters(PDOId.PDO_4, params)
     check("setRPDOCommunicationParameters(PDOId.PDO_4)", error)
+
+    # TPDO3 communication mapping
+
+    # - statusword
+    # - position_value or hall_encoder
+
+    mapping = PDOMappingParameters()
+    mapping.nb = 2
+    mapping.items.append(0x6041_00_10)
+    mapping.items.append(0x6064_00_20) # position_value
+    # mapping.items.append(0x2305_06_20)  # hall_encoder
+
+    communication_client.setTPDOMappingParameters(PDOId.PDO_3, mapping)
+    check("setTPDOMappingParameters(PDOId.PDO_3)", error)
 
 
 def update_polarity_parameters(polarity: bool):
@@ -163,6 +189,7 @@ def update_STO_parameters(status):
     error = safe_motion_client.setSTOParameters(STOId.STO_1, params)
     check("setSTOParameters(STOId.STO_1)", error)
 
+
 def update_SLS_parameters(vl_limit, vl_time_monitoring):
     params, signature, error = safe_motion_client.getSLSParameters(SLSId.SLS_1)
     check("getLSParameters(SLSId.SLS_1)", error)
@@ -172,6 +199,12 @@ def update_SLS_parameters(vl_limit, vl_time_monitoring):
 
     error = safe_motion_client.setSLSParameters(SLSId.SLS_1, params)
     check("setSLSParameters(SLSId.SLS_1)", error)
+
+
+def update_error_behavior():
+    error = can_open_client.setValueUInt8(0x1029_02_00, 1)  # error_behavior_syserr_for_error => 1 (no change of the NMT state)
+    check("update_error_behavior()", error)
+
 
 # Init
 def create_dbus_clients(instance_id: str):
@@ -184,6 +217,7 @@ def create_dbus_clients(instance_id: str):
     global velocity_mode_client
     global srdo_client
     global communication_client
+    global can_open_client
 
     # Load specific dbus user session if exists
     if os.path.isfile("/tmp/SYSTEMCTL_dbus.id"):
@@ -199,5 +233,6 @@ def create_dbus_clients(instance_id: str):
     velocity_mode_client = VelocityModeDBusClient(instance_id)
     srdo_client = SRDODBusClient(instance_id)
     communication_client = CommunicationDBusClient(instance_id)
+    can_open_client = CANOpenDBusClient(instance_id)
 
     check(f"create_dbus_clients({instance_id})", 1)

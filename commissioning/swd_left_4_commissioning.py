@@ -21,8 +21,8 @@ def update_SRDO_parameters():
     srdoParam.can_id1 = 0x109
     srdoParam.can_id2 = 0x10A
     srdoParam.valid = 1
-    srdoParam.sct = 255
-    srdoParam.srvt = 100
+    srdoParam.sct = 50
+    srdoParam.srvt = 20
     error = commissioning.srdo_client.setSRDOParameters(SRDOId.SRDO_9, srdoParam)
     commissioning.check("setSRDOParameters(SRDOId.SRDO_9)", error)
 
@@ -50,7 +50,7 @@ def update_SRDO_parameters():
     srdoParam.can_id1 = 0x160
     srdoParam.can_id2 = 0x161
     srdoParam.valid = 1
-    srdoParam.sct = 50
+    srdoParam.sct = 25
     srdoParam.srvt = 20
     error = commissioning.srdo_client.setSRDOParameters(SRDOId.SRDO_16, srdoParam)
     commissioning.check("setSRDOParameters(SRDOId.SRDO_16)", error)
@@ -149,6 +149,11 @@ def main(argv):
     # Update SLS parameters
     #
     commissioning.update_SLS_parameters(sls_vl_limit, sls_vl_time_monitoring)
+
+    #
+    # Update error behavior
+    #
+    commissioning.update_error_behavior()
 
     # Save modified parameters
     error = commissioning.communication_client.storeParameters(BlocId.ALL)

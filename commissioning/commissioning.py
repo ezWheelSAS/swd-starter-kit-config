@@ -68,9 +68,10 @@ def update_network_parameters(node_id: int):
 def update_communication_parameters(node_id: int):
 
     params = PDOCommunicationParameters()
+    mapping = PDOMappingParameters()
 
     params.cob_id.can_id = 0x180 + node_id  # 0x180 + $NODE_ID
-    params.cob_id.valid = False
+    params.cob_id.valid = True
     params.cob_id.flag = True
     params.transmission_type = PDOTransmissionType.PDO_SYNC_1
 
@@ -78,6 +79,8 @@ def update_communication_parameters(node_id: int):
     params.cob_id.can_id = 0x180 + node_id  # 0x180 + $NODE_ID
     error = communication_client.setTPDOCommunicationParameters(PDOId.PDO_1, params)
     check("setTPDOCommunicationParameters(PDOId.PDO_1)", error)
+
+    params.cob_id.valid = False
 
     # Set the COB ID of the TPDO_2
     params.cob_id.can_id = 0x280 + node_id  # 0x280 + $NODE_ID
@@ -90,8 +93,6 @@ def update_communication_parameters(node_id: int):
     params.cob_id.can_id = 0x380 + node_id  # 0x380 + $NODE_ID
     error = communication_client.setTPDOCommunicationParameters(PDOId.PDO_3, params)
     check("setTPDOCommunicationParameters(PDOId.PDO_3)", error)
-
-    params.cob_id.valid = False
 
     # Set the COB ID of the TPDO_4
     params.cob_id.can_id = 0x480 + node_id  # 0x480 + $NODE_ID
@@ -124,15 +125,26 @@ def update_communication_parameters(node_id: int):
     error = communication_client.setRPDOCommunicationParameters(PDOId.PDO_4, params)
     check("setRPDOCommunicationParameters(PDOId.PDO_4)", error)
 
+    # TPDO1 communication mapping
+
+    # - safety_controlword_safein_1
+
+    mapping.nb = 1
+    mapping.items.clear()
+    mapping.items.append(0x2620_02_08)
+
+    communication_client.setTPDOMappingParameters(PDOId.PDO_1, mapping)
+    check("setTPDOMappingParameters(PDOId.PDO_1)", error)
+
     # TPDO3 communication mapping
 
     # - statusword
     # - position_value or hall_encoder
 
-    mapping = PDOMappingParameters()
     mapping.nb = 2
+    mapping.items.clear()
     mapping.items.append(0x6041_00_10)
-    mapping.items.append(0x6064_00_20) # position_value
+    mapping.items.append(0x6064_00_20)  # position_value
     # mapping.items.append(0x2305_06_20)  # hall_encoder
 
     communication_client.setTPDOMappingParameters(PDOId.PDO_3, mapping)
@@ -170,10 +182,11 @@ def disable_SRDO_parameters():
     check("setSRDOConfigurationValidity()", error)
 
 
-def update_ramps(vl_dec_delta_speed):
+def update_ramps(vl_acc_delta_speed, vl_dec_delta_speed):
     params, error = velocity_mode_client.getVelocityModeParameters()
     check("getVelocityModeParameters()", error)
 
+    params.vl_velocity_acceleration_delta_speed = vl_acc_delta_speed
     params.vl_velocity_deceleration_delta_speed = vl_dec_delta_speed
 
     error = velocity_mode_client.setVelocityModeParameters(params)
@@ -196,6 +209,7 @@ def update_SLS_parameters(vl_limit, vl_time_monitoring):
 
     params.velocity_limit_u32 = vl_limit
     params.time_to_velocity_monitoring = vl_time_monitoring
+    params.time_for_velocity_in_limits = vl_time_monitoring
 
     error = safe_motion_client.setSLSParameters(SLSId.SLS_1, params)
     check("setSLSParameters(SLSId.SLS_1)", error)

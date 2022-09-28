@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from enum import Enum
 import sys
 import time
 
-sys.path.append(".")
+sys.path.append("..")
 
 import commissioning
 
@@ -18,8 +21,8 @@ def update_SRDO_parameters():
     # SRDO_9
     # communication parameters (RX)
     srdoParam = SRDOParameters()
-    srdoParam.can_id1 = 0x160
-    srdoParam.can_id2 = 0x161
+    srdoParam.can_id1 = 0x109
+    srdoParam.can_id2 = 0x10A
     srdoParam.valid = 1
     srdoParam.sct = 50
     srdoParam.srvt = 20
@@ -38,22 +41,19 @@ def update_SRDO_parameters():
         SafetyFunctionId.NONE,
         SafetyFunctionId.NONE,
     ]
-
     scwMapping[0] = SafetyFunctionId.STO
     scwMapping[1] = SafetyFunctionId.STO
-    scwMapping[2] = SafetyFunctionId.SDIP_1
-    scwMapping[3] = SafetyFunctionId.SDIP_1
-    scwMapping[4] = SafetyFunctionId.SLS_1
-    scwMapping[5] = SafetyFunctionId.SLS_1
+    scwMapping[2] = SafetyFunctionId.SLS_1
+    scwMapping[3] = SafetyFunctionId.SLS_1
 
     commissioning.safe_motion_client.setSafetyControlWordMapping(scw, commissioning.list_to_swm(scwMapping))
     commissioning.check("setSafetyControlWordMapping()", error)
 
-    # SRDO 16
+    # SRDO_16
     # communication parameters (TX)
     srdoParam = SRDOParameters()
-    srdoParam.can_id1 = 0x109
-    srdoParam.can_id2 = 0x10A
+    srdoParam.can_id1 = 0x160
+    srdoParam.can_id2 = 0x161
     srdoParam.valid = 1
     srdoParam.sct = 25
     srdoParam.srvt = 20
@@ -70,8 +70,11 @@ def update_SRDO_parameters():
         SafetyFunctionId.NONE,
         SafetyFunctionId.NONE,
     ]
+
     scwMapping[0] = SafetyFunctionId.STO
     scwMapping[1] = SafetyFunctionId.STO
+    scwMapping[2] = SafetyFunctionId.SDIN_1
+    scwMapping[3] = SafetyFunctionId.SDIN_1
 
     commissioning.safe_motion_client.setSafetyControlWordMapping(scw, commissioning.list_to_swm(scwMapping))
     commissioning.check("setSafetyControlWordMapping()", error)
@@ -88,10 +91,11 @@ def update_SRDO_parameters():
 
 def main(argv):
 
-    instance_id = "swd_right"
-    node_id = 5
-    polarity = False  # velocity demand value/motor revolution increments shall be multiplied by –1 if True
-    vl_dec_delta_speed = 1000
+    instance_id = "swd_left"
+    node_id = 0x4
+    polarity = True  # velocity demand value/motor revolution increments shall be multiplied by –1 if True
+    vl_acc_delta_speed = 1500
+    vl_dec_delta_speed = 1500
     restart_acknowledge_behavior = False
     sls_vl_limit = 680
     sls_vl_time_monitoring = 1000
@@ -107,8 +111,8 @@ def main(argv):
     error = commissioning.nmt_client.setNMTState(NMTCommand.RESET_NODE)
     commissioning.check("Reset to apply parameters", error)
 
-    # Sleep 500ms
-    time.sleep(0.5)
+    # Sleep 1000ms
+    time.sleep(1.0)
 
     #
     # Change Network parameters
@@ -138,7 +142,7 @@ def main(argv):
     #
     # Update Ramps
     #
-    commissioning.update_ramps(vl_dec_delta_speed)
+    commissioning.update_ramps(vl_acc_delta_speed, vl_dec_delta_speed)
 
     #
     # Update STO parameters

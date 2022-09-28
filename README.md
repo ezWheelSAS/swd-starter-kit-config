@@ -4,7 +4,7 @@ This repo contains a set of sample configuration files for the SWD Starter Kit.
 
 ### Prerequisites
 
-- `swd-services (>= 0.2.0)`
+- `swd-services (>= 0.2.7)`
 ## Commissioning
 The [`commissioning`](./commissioning) directory contains scripts for commissioning the left and right motors, alongside with a configuration file for the used LiDAR.
 

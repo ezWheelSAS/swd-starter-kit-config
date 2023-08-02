@@ -101,7 +101,7 @@ Activation signal **"Protection1"** on **OSSD 1 & 2** is used for indicating the
 
 ![Protection zone 1 (SDI)](figs/idec-4.png)
 
-Activation signal **"Protection2"** on **OSSD 3 & 4** is used for indicating the Safety Limited Speed (SLS), which gets activated if an obstacle is detected at less than **2m** (connected to **SafeOut 1 & 2** on the left SWD motor).
+Activation signal **"Protection2"** on **OSSD 3 & 4** is used for indicating the Safety Limited Speed (SLS), which gets activated if an obstacle is detected at less than **1m** (connected to **SafeOut 1 & 2** on the left SWD motor).
 
 ![Protection zone 2 (SLS)](figs/idec-5.png)
 

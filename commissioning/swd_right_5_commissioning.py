@@ -5,8 +5,6 @@ from enum import Enum
 import sys
 import time
 
-sys.path.append("..")
-
 import commissioning
 
 from smcdbusclient.communication import BlocId

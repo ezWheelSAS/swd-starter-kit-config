@@ -5,8 +5,6 @@ from enum import Enum
 import sys
 import time
 
-sys.path.append("..")
-
 import commissioning
 
 from smcdbusclient.communication import BlocId
@@ -43,8 +41,6 @@ def update_SRDO_parameters():
     ]
     scwMapping[0] = SafetyFunctionId.STO
     scwMapping[1] = SafetyFunctionId.STO
-    scwMapping[2] = SafetyFunctionId.SLS_1
-    scwMapping[3] = SafetyFunctionId.SLS_1
 
     commissioning.safe_motion_client.setSafetyControlWordMapping(scw, commissioning.list_to_swm(scwMapping))
     commissioning.check("setSafetyControlWordMapping()", error)
@@ -75,6 +71,8 @@ def update_SRDO_parameters():
     scwMapping[1] = SafetyFunctionId.STO
     scwMapping[2] = SafetyFunctionId.SDIN_1
     scwMapping[3] = SafetyFunctionId.SDIN_1
+    scwMapping[4] = SafetyFunctionId.SLS_1
+    scwMapping[5] = SafetyFunctionId.SLS_1
 
     commissioning.safe_motion_client.setSafetyControlWordMapping(scw, commissioning.list_to_swm(scwMapping))
     commissioning.check("setSafetyControlWordMapping()", error)

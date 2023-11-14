@@ -95,8 +95,10 @@ def main(argv):
     vl_acc_delta_speed = 1500
     vl_dec_delta_speed = 1500
     restart_acknowledge_behavior = False
-    sls_vl_limit = 680
-    sls_vl_time_monitoring = 1000
+    sls_1_vl_limit = 680
+    sls_1_vl_time_monitoring = 1000
+    sls_2_vl_limit = 680
+    sls_2_vl_time_monitoring = 1000
 
     # Create DBus clients
     commissioning.create_dbus_clients(instance_id)
@@ -150,7 +152,8 @@ def main(argv):
     #
     # Update SLS parameters
     #
-    commissioning.update_SLS_parameters(sls_vl_limit, sls_vl_time_monitoring)
+    commissioning.update_SLS_1_parameters(sls_1_vl_limit, sls_1_vl_time_monitoring)
+    commissioning.update_SLS_2_parameters(sls_2_vl_limit, sls_2_vl_time_monitoring)
 
     #
     # Update error behavior

@@ -203,9 +203,9 @@ def update_STO_parameters(status):
     check("setSTOParameters(STOId.STO_1)", error)
 
 
-def update_SLS_parameters(vl_limit, vl_time_monitoring):
+def update_SLS_1_parameters(vl_limit, vl_time_monitoring):
     params, signature, error = safe_motion_client.getSLSParameters(SLSId.SLS_1)
-    check("getLSParameters(SLSId.SLS_1)", error)
+    check("getSLSParameters(SLSId.SLS_1)", error)
 
     params.velocity_limit_u32 = vl_limit
     params.time_to_velocity_monitoring = vl_time_monitoring
@@ -213,6 +213,18 @@ def update_SLS_parameters(vl_limit, vl_time_monitoring):
 
     error = safe_motion_client.setSLSParameters(SLSId.SLS_1, params)
     check("setSLSParameters(SLSId.SLS_1)", error)
+
+
+def update_SLS_2_parameters(vl_limit, vl_time_monitoring):
+    params, signature, error = safe_motion_client.getSLSParameters(SLSId.SLS_2)
+    check("getSLSParameters(SLSId.SLS_2)", error)
+
+    params.velocity_limit_u32 = vl_limit
+    params.time_to_velocity_monitoring = vl_time_monitoring
+    params.time_for_velocity_in_limits = vl_time_monitoring
+
+    error = safe_motion_client.setSLSParameters(SLSId.SLS_2, params)
+    check("setSLSParameters(SLSId.SLS_2)", error)
 
 
 def update_error_behavior():
